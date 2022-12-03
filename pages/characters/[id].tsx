@@ -1,6 +1,9 @@
 import Image from "next/image";
-import imageLoader from "../../imageLoader";
+import { ReactNode } from "react";
 import { Character } from "../../types";
+import { GetServerSideProps } from "next";
+import imageLoader from "../../imageLoader";
+import Layout from "../../components/Layout";
 
 export default function CharacterPage({ character }: { character: Character }) {
 
@@ -22,20 +25,12 @@ export default function CharacterPage({ character }: { character: Character }) {
     )
 }
 
-export async function getStaticPaths() {
-    const res = await fetch("https://rickandmortyapi.com/api/character")
-    const { results } = await res.json();
-
-    return {
-        paths: results.map((character: any) => {
-            return { params: { id: String(character.id) } }
-        }),
-        fallback: false,
-    }
+CharacterPage.getLayout = function getLayout(page: ReactNode) {
+    return <Layout>{page}</Layout>
 }
 
-export async function getStaticProps({ params }: { params: { id: string } }) {
-    const res = await fetch(`https://rickandmortyapi.com/api/character/${params.id}`)
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    const res = await fetch(`https://rickandmortyapi.com/api/character/${context.query.id}`)
     const character = await res.json()
     return {
         props: {

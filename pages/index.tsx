@@ -1,12 +1,15 @@
 import Head from 'next/head'
+import Link from 'next/link'
+import Image from 'next/image'
+import { Character } from '../types'
+import { useRouter } from 'next/router'
+import imageLoader from '../imageLoader'
 import styles from '../styles/Home.module.css'
 import { GetStaticProps, NextPage } from 'next'
-import { Character } from '../types'
-import Image from 'next/image'
-import imageLoader from '../imageLoader'
-import Link from 'next/link'
 
 const Home: NextPage<{ characters: Character[] }> = ({ characters }) => {
+  const router = useRouter();
+
   return (
     <>
       <div className={styles.container}>
